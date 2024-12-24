@@ -2,7 +2,9 @@ from fastapi import FastAPI, HTTPException,Depends, Body
 from environment.schemas import signup,login,input_data
 from dotenv import dotenv_values
 from pymongo import MongoClient
-from environment.config import add_user,add_reading
+from environment.config import add_user,add_reading,get_reading
+import numpy as np
+
 
 #config
 config = dotenv_values(".env")
@@ -35,3 +37,29 @@ def upload_reading(
     add_reading(data)
     
     return {"message": "Data uploaded successfully"}
+
+@app.get("/getreading")
+def recieve_reading():
+    readings = get_reading()
+    # Extract latitude, longitude, and average chloride value
+    results = []
+    for reading in readings:
+        #print(reading)
+        latitude = reading['location']['latitude']
+        longitude = reading['location']['longitude']
+        
+        # Find the chloride measurement and calculate its average
+        chloride_measurement = next(
+            (m for m in reading['measurements'] if m['name'] == 'chloride'), None
+        )
+        if chloride_measurement:
+            chloride_avg = sum(chloride_measurement['values']) / len(chloride_measurement['values'])
+        else:
+            chloride_avg = None
+        
+        results.append((latitude,  longitude,chloride_avg))
+
+    # Print the results
+    #print(results)
+
+    return results

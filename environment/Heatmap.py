@@ -6,6 +6,7 @@ import threading
 import http.server
 import socketserver
 import os
+import requests
 
 class LiveHeatmapServer:
     def __init__(self, map_center=(0, 0), zoom_start=2, update_interval=5, map_file="live_map.html"):
@@ -14,7 +15,7 @@ class LiveHeatmapServer:
         self.update_interval = update_interval
         self.map_file = map_file
         self.running = False
-        self.port = 8000
+        self.port = 8080
 
     def generate_random_data(self):
         """
@@ -23,6 +24,18 @@ class LiveHeatmapServer:
         """
         return [(np.random.uniform(-90, 90), np.random.uniform(-180, 180), np.random.uniform(1, 100)) for _ in range(100)]
 
+    def get_data_from_mongodb(self):
+        """
+        fetch data from mongodb sever.
+            
+        """
+        r = requests.get('http://127.0.0.1:8000/getreading')
+        #print(r.json())
+        data_as_tuples = [tuple(item) for item in r.json()]
+        print("requesting data")
+        #print(data_as_tuples)
+        return data_as_tuples
+    
     def update_map(self):
         """
         Updates the heatmap and saves it to an HTML file.
@@ -30,7 +43,7 @@ class LiveHeatmapServer:
         while self.running:
             try:
                 # Generate new data
-                data = self.generate_random_data()
+                data = self.get_data_from_mongodb()
                 locations = [[lat, lon] for lat, lon, _ in data]
                 weights = [value for _, _, value in data]
 

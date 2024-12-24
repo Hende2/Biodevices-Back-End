@@ -39,3 +39,16 @@ def add_reading(details: Dict) -> str:
         return f"Validation error: {e}"
     except Exception as e:
         return f"An error occurred: {e}"
+    
+def get_reading():
+    try:
+        # Fetch all documents from the collection
+        readings = list(collection_data.find())
+        
+        # Optionally, print the readings or process them
+        for reading in readings:
+            print(reading)
+        
+        return readings
+    except Exception as e:
+        return f"An error occurred: {e}"
