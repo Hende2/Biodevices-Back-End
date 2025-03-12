@@ -17,6 +17,7 @@ collection = db["user_accounts"]
 collection_list = collection.find().to_list()
 
 def hash_password(password: str) -> str:
+    """Hash a plain text password."""
     return pwd_context.hash(password)
 
 def signup():

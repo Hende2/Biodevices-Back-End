@@ -77,3 +77,4 @@ def contouring(cv2_image):
     plt.subplot(121), plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB)), plt.title('Original Image')
     plt.subplot(122), plt.imshow(cv2.cvtColor(river_image, cv2.COLOR_BGR2RGB)), plt.title('River Contours')
     plt.show()
+    
