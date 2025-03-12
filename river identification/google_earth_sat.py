@@ -175,3 +175,25 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error: {e}")
 
+        def get_sentinel_image(
+            latitude: float,
+            longitude: float,
+            zoom_level: int,
+            image_size: Tuple[int, int] = (640, 640)) -> Tuple[np.ndarray, Dict[str, float]]:
+
+            # Use Google Maps Static API to get the image
+            image_url = get_map_image(latitude, longitude, zoom_level, image_size)
+            with urllib.request.urlopen(image_url) as url:
+                image_data = url.read()
+
+            # Convert image data to numpy array
+            image = Image.open(io.BytesIO(image_data))
+            image_array = np.array(image)
+
+            # Normalize the image array
+            image_array = image_array / 255.0
+
+            # Calculate metadata
+            metadata = calculate_image_metadata(latitude, longitude, zoom_level, image_size)
+
+            return image_array, metadata

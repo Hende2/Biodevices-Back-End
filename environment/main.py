@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException,Depends, Body
+from fastapi.responses import FileResponse, HTMLResponse
 from environment.schemas import signup,login,input_data
 from dotenv import dotenv_values
 from pymongo import MongoClient
@@ -63,3 +64,22 @@ def recieve_reading():
     #print(results)
 
     return results
+
+# Base and Map View Endpoints
+@app.get("/")
+async def home():
+    return HTMLResponse("""
+        <html>
+            <head>
+                <title>Live Heatmap</title>
+            </head>
+            <body>
+                <h1>Welcome to the Live Heatmap Application</h1>
+                <a href="/view_map">View 2D Heatmap</a><br>
+            </body>
+        </html>
+    """)
+
+@app.get("/view_map")
+async def view_map():
+    return FileResponse("live_map.html")

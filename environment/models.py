@@ -34,88 +34,32 @@ class DateTimeModel(BaseModel):
     date: int
     time: str
 
-class Measurement(BaseModel):
+# Models for validation
+class ReadingMeasurement(BaseModel):
     name: str
-    values: List[int]
+    value: float
 
-class Location(BaseModel):
-    latitude: float
-    longitude: float
 
-class data_reading(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
-    datetime: DateTimeModel
-    hasSynced: bool
-    isSafe: bool
-    location: Location
-    measurements: List[Measurement]
-    timeIntervals: List[int]
-    uid: str  
-    
-    class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
-            "example": {
-                "id": "2IadT7MIyb04MiNS5oZ10",
-                "datetime": {
-                    "date": 12093600,
-                    "time": "31:05:23"
-                },
-                "hasSynced": True,
-                "isSafe": False,
-                "location": {
-                    "latitude": 0.0,
-                    "longitude": 0.0
-                },
-                "measurements": [
-                    {
-                        "name": "chloride",
-                        "values": [
-                            0,
-                            0,
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "name": "ph",
-                        "values": [
-                            0,
-                            0,
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "name": "temperature",
-                        "values": [
-                            0,
-                            0,
-                            0,
-                            0,
-                            0
-                        ]
-                    },
-                    {
-                        "name": "turbidity",
-                        "values": [
-                            0,
-                            0,
-                            0,
-                            0,
-                            0
-                        ]
-                    }
-                ],
-                "timeIntervals": [
-                    0,
-                    100,
-                    200,
-                    300,
-                    400
-                ],
-                "uid": "Gclcb3xyWyQw4AD82WuaEGxbE5E2"
-            }
-        }
+class Reading(BaseModel):
+    location: dict
+    datetime: dict
+    measurements: List[ReadingMeasurement]
+    isSafe: bool = False
+    hasSynced: bool = True
+    id: Optional[str] = None
+    uid: str
+
+
+class User(BaseModel):
+    uid: str
+    email: str
+    hashed_password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    uid: Optional[str] = None
