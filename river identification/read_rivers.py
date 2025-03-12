@@ -38,7 +38,7 @@ def extract_river_coordinates(shapefile, river_name_column, river_name):
 
 
 # Example usage
-shapefile = "WatercourseLink.shp"  # File path
+shapefile = "c:/Users/Jamie/Documents/GitHub/Back-End/river identification/WatercourseLink.shp"  # File path
 river_name_column = "name1"  # Select the column containing the river names
 river_name = "Burn of Sulerdale"  # Specific river
     

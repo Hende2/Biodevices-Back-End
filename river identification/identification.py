@@ -74,8 +74,12 @@ def contouring(cv2_image):
     plt.subplot(121), plt.imshow(cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)), plt.title('Original Image')
     plt.subplot(122), plt.imshow(cv2.cvtColor(river_image, cv2.COLOR_BGR2RGB)), plt.title('River Contours')
     plt.show()
+<<<<<<< HEAD:environment/RiverIdentification/identification.py
 
 garbled = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/environment/RiverIdentification/UoB_sentinel.png")
 proper = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/environment/RiverIdentification/UoB_gmap.png")
 # kclustering(proper)
 contouring(proper)
+=======
+    
+>>>>>>> 32a945abc91dfd42c120e8397b7b5a253220dfeb:river identification/identification.py
