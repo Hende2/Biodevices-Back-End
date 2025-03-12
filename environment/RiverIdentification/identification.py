@@ -4,9 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-
-image = cv2.imread('river_image.png') # Load data
-
 # Approach 1: K-Means Clustering
 def kclustering(cv2_image):
     '''Using K-Means Clustering to identify a river in a image read by OpenCV
@@ -74,6 +71,11 @@ def contouring(cv2_image):
     cv2.drawContours(river_image, contours, -1, (0, 255, 0), 2)  # Green color for the river contour
 
     # Display the original image and the image with river contours
-    plt.subplot(121), plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB)), plt.title('Original Image')
+    plt.subplot(121), plt.imshow(cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)), plt.title('Original Image')
     plt.subplot(122), plt.imshow(cv2.cvtColor(river_image, cv2.COLOR_BGR2RGB)), plt.title('River Contours')
     plt.show()
+
+garbled = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/environment/RiverIdentification/UoB_sentinel.png")
+proper = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/environment/RiverIdentification/UoB_gmap.png")
+# kclustering(proper)
+contouring(proper)
