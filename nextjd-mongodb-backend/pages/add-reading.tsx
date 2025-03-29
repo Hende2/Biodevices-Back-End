@@ -1,21 +1,28 @@
 "use client";
 
-import React, { Fragment } from 'react';
-import { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import React, { Fragment, useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { signOut } from 'next-auth/react';
+import Slider from '@mui/material/Slider';
+import { useMapEvents } from 'react-leaflet'; // Import useMapEvents directly
+import 'leaflet/dist/leaflet.css';
+
+// Dynamically import react-leaflet components with SSR disabled
+const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), { ssr: false });
 
 export default function AddReading() {
   const { data: session } = useSession();
   const router = useRouter();
-  const [form, setForm] = useState({ location: '', value: '' });
+  const [form, setForm] = useState({ location: { lat: 0, lng: 0 }, value: 50 });
 
   useEffect(() => {
     console.log('Session from useSession():', session);
   }, [session]);
 
+  // If the user is not logged in, show a message and a login button
   if (!session) {
     return (
       <Fragment>
@@ -49,26 +56,38 @@ export default function AddReading() {
     }
   };
 
+  function LocationMarker() {
+    useMapEvents({
+      click(e) {
+        setForm({ ...form, location: e.latlng });
+      },
+    });
+
+    return form.location !== null ? (
+      <Marker position={form.location}></Marker>
+    ) : null;
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen p-8">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Location"
-          value={form.location}
-          onChange={(e) => setForm({ ...form, location: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Value"
+        <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '400px', width: '100%' }}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <LocationMarker />
+        </MapContainer>
+        <Slider
           value={form.value}
-          onChange={(e) => setForm({ ...form, value: e.target.value })}
-          required
+          onChange={(e, newValue) => setForm({ ...form, value: newValue })}
+          aria-labelledby="continuous-slider"
+          valueLabelDisplay="auto"
+          min={0}
+          max={100}
         />
         <button type="submit">Add Reading</button>
-
-        <button onClick={() => signOut()}>Logout</button>;
+        <button type="button" onClick={() => signOut()}>Logout</button>
       </form>
     </div>
   );
