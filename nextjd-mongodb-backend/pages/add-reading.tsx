@@ -63,7 +63,7 @@ export default function AddReading() {
       },
     });
 
-    return form.location ? (
+    return form.location !== null ? (
       <Marker position={form.location}></Marker>
     ) : null;
   }
