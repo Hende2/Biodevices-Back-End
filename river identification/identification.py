@@ -77,5 +77,5 @@ def contouring(cv2_image):
 garbled = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/river identification/UoB_sentinel.png")
 proper = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/river identification/UoB_gmap.png")
 test = cv2.imread(r"/Users/tom/Documents/Biodevices/Repository Git/Biodevices-Back-End/river identification/images/google_maps_2.png")
-kclustering(test)
-# contouring(garbled)
+# kclustering(test)
+contouring(test)
